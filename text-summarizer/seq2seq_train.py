@@ -5,19 +5,25 @@ import config
 import data_utils
 import seq2seq_wrapper
 from os import path
+import sys
 
 #load data and split into train and test sets
 idx_headings, idx_descriptions = data_processing.process_data()
 article_metadata = data_processing.unpickle_articles()
-(x_train, x_test), (y_train, y_test), (x_valid, y_valid) = data_utils.split_data(idx_descriptions, idx_headings)
+(x_train, y_train ), (x_test, y_test), (x_valid, y_valid) = data_utils.split_data(idx_descriptions, idx_headings)
 
 #define parameters
-xseq_length = x_train.shape[-1]
-yseq_length = y_train.shape[-1]
+if (sys.argv[1]).lower() == "train":
+    xseq_length = len(x_train)
+    yseq_length = len(y_train)
+else:
+    xseq_length = len(x_test)
+    yseq_length = len(y_test)
+
 batch_size = config.batch_size
 xvocab_size = len(article_metadata['idx2word'])
 yvocab_size = xvocab_size
-checkpoint_path = path.join(config.path_outputs, 'checkpoint')
+checkpoint_path = path.join(config.path_outputs)
 
 print (checkpoint_path)
 
@@ -33,8 +39,15 @@ model = seq2seq_wrapper.Seq2Seq(xseq_len=xseq_length,
 val_batch_gen = data_utils.generate_random_batch(x_valid, y_valid, config.batch_size)
 train_batch_gen = data_utils.generate_random_batch(x_train, y_train, config.batch_size)
 
-sess = model.restore_last_session()
-sess = model.train(train_batch_gen, val_batch_gen)
+
+isSessionRestored = model.restore_last_session()
+if (sys.argv[1]).lower() == "train":
+    model.train(train_batch_gen, val_batch_gen,isSessionRestored)
+else:
+    result = model.predict(x_test)
+    for i in result:
+        print(x_test[i])
+
 
 
 

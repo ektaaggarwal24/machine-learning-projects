@@ -5,7 +5,8 @@ from nltk.tokenize import word_tokenize as tokenize
 import nltk
 import itertools
 import numpy as np
-import cPickle as pickle
+#import cPickle as pickle
+import pickle
 
 WHITELIST = '0123456789abcdefghijklmnopqrstuvwxyz '
 VOCAB_SIZE = 1200
@@ -14,7 +15,7 @@ UNK = 'unk'
 limit = {
     'max_descriptions' : 400,
     'min_descriptions' : 0,
-    'max_headings' : 20,
+    'max_headings' : 400, #20
     'min_headings' : 0,
 }
 
@@ -22,7 +23,6 @@ def load_raw_data(filename):
     #################################
     #   Loads raw data from file    #
     #################################
-
     with open(filename, 'r') as fp:
         raw_data = json.load(fp)
 
@@ -60,8 +60,8 @@ def tokenize_articles(raw_data):
         if article_is_complete(a):
             headings.append(tokenize_sentence(a['abstract']))
             descriptions.append(tokenize_sentence(a['article']))
-        if i % config.print_freq == 0:
-            print('Tokenized {:,} / {:,} articles'.format(i, num_articles))
+        #if i % config.print_freq == 0: #ekta commented
+            #print('Tokenized {:,} / {:,} articles'.format(i, num_articles))
 
     return (headings, descriptions)
 

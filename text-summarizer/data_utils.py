@@ -1,5 +1,6 @@
 import numpy as np
-from random import sample
+#from random import sample
+import random
 import config
 
 def split_data(x, y, ratio=[0.8, 0.1, 0.1]):
@@ -14,8 +15,10 @@ def split_data(x, y, ratio=[0.8, 0.1, 0.1]):
 
 def generate_random_batch(x, y, batch_size):
     while True:
-        sample_idx = sample(list(np.arrange(len(x))), config.batch_size)
-        yield x[sample_idx].T, y[sample_idx].T
+        #sample_idx = sample(list(np.arange(len(x))), batch_size)
+        sample_idx = [random.choice(list(np.arange(len(x)))) for i in range(config.batch_size)]
+        #yield x[sample_idx].T, y[sample_idx].T
+        yield [x[i] for i in sample_idx], [y[i] for i in sample_idx]
 
 def decode(sequence, lookup, separator=''):
     return separator.join([lookup[element] for element in sequence if element])
