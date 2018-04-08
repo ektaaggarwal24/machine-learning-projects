@@ -9,7 +9,7 @@ import sys
 
 #load data and split into train and test sets
 idx_headings, idx_descriptions = data_processing.process_data()
-article_metadata = data_processing.unpickle_articles()
+article_metadata = data_processing.unpickle_articles("CNN_article_data.pkl")
 (x_train, y_train ), (x_test, y_test), (x_valid, y_valid) = data_utils.split_data(idx_descriptions, idx_headings)
 
 #define parameters
