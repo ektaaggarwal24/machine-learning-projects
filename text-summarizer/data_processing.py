@@ -146,13 +146,14 @@ def zero_pad(tokenized_headings, tokenized_descriptions, word2idx):
 
 def process_data():
 
-    #load CNN dataset from pickled file
-    raw_data = unpickle_articles("cnn_dataset.pkl")
+    #unpickle CNN dataset
+    #unpickle_articles('article_data.pkl')
+    raw_data = unpickle_articles('cnn_dataset.pkl')
     
-
+    
     '''#load data from file
     filename = path.join(config.path_data, 'raw_data.json')
-    raw_data = load_raw_data(filename)'''
+    raw_data = load_raw_data(filename) '''
 
     #tokenize articles and separate into headings and descriptions
     headings, descriptions = tokenize_articles(raw_data)
@@ -183,11 +184,11 @@ def process_data():
         'freq_dist': freq_dist,
     }
 
-    pickle_data(article_data,"CNN_article_data.pkl")
+    pickle_data(article_data, "CNN_article_data.pkl")
 
     return (idx_headings, idx_descriptions)
 
-def pickle_data(article_data,fileName):
+def pickle_data(article_data, fileName):
     ###########################################
     #   Saves obj to disk as a pickle file    #
     ###########################################
@@ -195,12 +196,12 @@ def pickle_data(article_data,fileName):
     with open(path.join(config.path_data, fileName), 'wb') as fp:
         pickle.dump(article_data, fp, 2)
 
-def unpickle_articles(fileName):
+def unpickle_articles(pickleFile):
     #################################################
     #   Loads pickle file from disk to give obj     #
     #################################################
 
-    with open(path.join(config.path_data, fileName), 'rb') as fp:
+    with open(path.join(config.path_data,pickleFile ), 'rb') as fp:
         article_data = pickle.load(fp)
 
     return article_data

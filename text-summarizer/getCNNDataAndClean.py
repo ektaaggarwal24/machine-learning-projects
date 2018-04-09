@@ -40,7 +40,7 @@ def load_stories(directory):
 def clean_lines(lines):
 	cleaned = list()
 	# prepare a translation table to remove punctuation
-	table = str.maketrans('', '', string.punctuation)
+	#table = str.maketrans('', '', string.punctuation)
 	for line in lines:
 		# strip source cnn office if it exists
 		index = line.find('(CNN) -- ')
@@ -51,9 +51,9 @@ def clean_lines(lines):
 		# convert to lower case
 		line = [word.lower() for word in line]
 		# remove punctuation from each token
-		line = [w.translate(table) for w in line]
+		#line = [w.translate(table) for w in line]
 		# remove tokens with numbers in them
-		line = [word for word in line if word.isalpha()]
+		#line = [word for word in line if word.isalpha()]
 		# store as string
 		cleaned.append(' '.join(line))
 	# remove empty strings
@@ -68,8 +68,8 @@ print('Loaded Stories %d' % len(stories))
 
 # clean stories
 for example in stories:
-	example['article'] = clean_lines(example['article'].split('\n'))
-	example['abstract'] = clean_lines(example['abstract'])
+	example['article'] = " ".join(clean_lines((example['article']).split('\n')))
+	example['abstract'] = clean_lines([example['abstract']])[0]
   
   
 dump(stories, open('cnn_dataset.pkl', 'wb'))
